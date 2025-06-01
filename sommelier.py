@@ -84,10 +84,11 @@ def describe_dish_flavor(image_bytes, query):
   return llm.invoke(messages).content
 
 def search_wine(dish_flavor):
-  results = vector_store.similarity_search(dish_flavor, k=2)
+  results = vector_store.similarity_search_with_score(dish_flavor, k=2)
   return {
     "dish_flavor" : dish_flavor,
-    "wine_reviews" : "\n\n".join([doc.page_content for doc in results])
+    # "wine_reviews" : "\n\n".join([doc.page_content for doc in results])
+    "wine_reviews" : "\n\n".join(["유사도 : " + str(round(doc[1] * 100, 3)) + "% \n\n" + doc[0].page_content for doc in results])
   }
 
 
